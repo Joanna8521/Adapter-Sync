@@ -1,0 +1,144 @@
+/* =====================================================
+   Adapter Sync — 注入頁面的 UI
+
+   出版社的 CSS 沒有社群平台兇，但一樣會重設 button、蓋掉 a 的顏色。
+   會被蓋到的屬性一律寫死，連 :visited :hover :active 都要一起寫——
+   只寫 color 的話，連結被點過就會突然變成瀏覽器預設的紫色。
+   ===================================================== */
+
+.adaptersync-btn {
+  position: fixed !important;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483646 !important;
+  display: block;
+  margin: 0 !important;
+  padding: 9px 15px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #0f3b2e !important;
+  color: #ffffff !important;
+  font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  opacity: 0.94;
+  transition: opacity 0.12s, transform 0.12s;
+}
+
+.adaptersync-btn:hover { opacity: 1; transform: translateY(-1px); }
+.adaptersync-btn:disabled { opacity: 0.5; cursor: default !important; transform: none; }
+
+.adaptersync-toast {
+  position: fixed !important;
+  right: 20px;
+  bottom: 68px;
+  z-index: 2147483647 !important;
+  max-width: 460px;
+  /* 診斷訊息會很長，但不能長到蓋掉整個畫面 */
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: #10241d;
+  color: #ffffff;
+  font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+.adaptersync-status-text {
+  display: block;
+  padding-right: 18px;
+  word-break: break-word;
+  /* 訊息是多行的（警告一行、結果一行）。不設 pre-line 會被壓成一行，
+     而那正是最需要看清楚的時候。 */
+  white-space: pre-line;
+}
+
+/* 不知道還要多久，但看得出它還活著 */
+.adaptersync-progress {
+  position: relative;
+  height: 3px;
+  margin-top: 9px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.adaptersync-progress i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38%;
+  height: 100%;
+  border-radius: 2px;
+  background: #34d399;
+  animation: adaptersync-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes adaptersync-slide {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+.adaptersync-link,
+.adaptersync-link:link,
+.adaptersync-link:visited,
+.adaptersync-link:hover,
+.adaptersync-link:active {
+  display: inline-block;
+  margin-top: 8px;
+  color: #6ee7b7 !important;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: underline !important;
+}
+
+.adaptersync-close {
+  position: absolute !important;
+  top: 8px;
+  right: 9px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+.adaptersync-close:hover { color: #ffffff !important; }
+
+.adaptersync-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.adaptersync-mini {
+  flex: 1;
+  padding: 6px 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+}
+
+.adaptersync-mini-primary {
+  border-color: #059669 !important;
+  background: #059669 !important;
+}
+
+.adaptersync-mini:hover { filter: brightness(1.12); }
+.adaptersync-mini:disabled { opacity: 0.45; cursor: default !important; }

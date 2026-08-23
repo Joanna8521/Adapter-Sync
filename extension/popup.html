@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 372px;
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-size: 13px;
+    color: #1f2937;
+    background: #ffffff;
+  }
+  header { background: #10241d; color: #ffffff; padding: 14px 16px; }
+  header h1 { font-size: 16px; }
+  header p { color: #6ee7b7; font-size: 12px; margin-top: 2px; }
+  section { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .row + .row { margin-top: 8px; }
+  .grow { flex: 1; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #dc2626; display: inline-block; flex: none; }
+  .dot.on { background: #10704a; }
+  label.small { font-size: 11px; color: #6b7280; letter-spacing: 0.05em; }
+  input[type="text"], select {
+    width: 100%; padding: 7px 10px; border: 1px solid #d1d5db;
+    border-radius: 7px; font-size: 13px; margin-top: 4px;
+  }
+  input[type="checkbox"] { width: 15px; height: 15px; flex: none; }
+  button {
+    border: 1px solid #d1d5db; background: #ffffff; color: #374151;
+    border-radius: 7px; padding: 7px 12px; font-size: 13px;
+    cursor: pointer; white-space: nowrap;
+  }
+  button.primary {
+    background: #059669; border-color: #059669; color: #ffffff;
+    width: 100%; padding: 9px; font-weight: 700;
+  }
+  button:hover { filter: brightness(0.96); }
+  .hint { font-size: 11px; color: #9ca3af; margin-top: 4px; line-height: 1.6; }
+  /* 診斷訊息是多行的。不設 pre-line 會被壓成一行，
+     而那正是最需要看清楚的時候。 */
+  .msg {
+    font-size: 12px; margin-top: 6px; min-height: 15px;
+    line-height: 1.55; white-space: pre-line; word-break: break-word;
+  }
+  .msg.ok { color: #10704a; }
+  .msg.err { color: #dc2626; }
+  a, a:link, a:visited, a:hover, a:active { color: #059669; }
+  .log { max-height: 150px; overflow-y: auto; }
+  .log-item {
+    padding: 6px 0; border-bottom: 1px solid #f9fafb;
+    font-size: 11.5px; line-height: 1.55; word-break: break-word;
+  }
+  .log-item:last-child { border-bottom: 0; }
+  .log-item .t { color: #9ca3af; }
+  .log-item.bad { color: #dc2626; }
+  .sites { font-size: 11.5px; color: #4b5563; line-height: 1.9; margin-top: 6px; }
+  .sites button { padding: 1px 6px; font-size: 11px; margin-left: 6px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>📄 Adapter Sync</h1>
+    <p>看到該留下來的論文，按一下就存起來</p>
+  </header>
+
+  <section>
+    <div class="row">
+      <span class="dot" id="dot"></span>
+      <span class="grow" id="connText">檢查中…</span>
+      <button id="connect">連接 Google</button>
+    </div>
+  </section>
+
+  <section>
+    <label class="small">GOOGLE DRIVE</label>
+    <div class="row" style="margin-top:6px">
+      <input type="checkbox" id="driveEnabled">
+      <span class="grow">寫進我的 Drive（一篇一份 Doc）</span>
+    </div>
+    <input type="text" id="driveFolder" placeholder="Adapter Sync 文獻收藏">
+    <div class="hint">資料夾第一次會自動建立。之後在 Drive 裡搬到哪裡都還有效。</div>
+  </section>
+
+  <section>
+    <label class="small">FOCUS4AI 知識庫</label>
+    <div class="row" style="margin-top:6px">
+      <input type="checkbox" id="f4Enabled">
+      <span class="grow">同步進知識庫（寫入就切片建索引）</span>
+    </div>
+    <div id="f4Box">
+      <input type="text" id="f4Base" placeholder="https://app.focus4ai.com">
+      <input type="text" id="f4Folder" placeholder="00_inbox/papers">
+      <div class="row" style="margin-top:8px">
+        <input type="checkbox" id="f4Private">
+        <span class="grow">標記為 local_only（不進檢索）</span>
+      </div>
+      <div class="hint">
+        文獻多半是公開內容，預設<b>不</b>標記——標了就進不了檢索，等於白收。
+      </div>
+      <button id="f4Test" style="width:100%;margin-top:8px">測試知識庫連線</button>
+      <div class="msg" id="f4Msg"></div>
+    </div>
+  </section>
+
+  <section>
+    <label class="small">出版社站台</label>
+    <div class="hint" style="margin-top:4px">
+      PubMed／PMC／arXiv／bioRxiv／medRxiv 內建，不用設定。
+      其他出版社（Nature、NEJM、Lancet、Elsevier…）要在那個站台上按一次啟用，
+      Chrome 才會給我們那個網域的權限。
+    </div>
+    <div class="row" style="margin-top:8px">
+      <span class="grow" id="hostText">目前分頁：—</span>
+      <button id="siteToggle">啟用</button>
+    </div>
+    <div class="msg" id="siteMsg"></div>
+    <div class="sites" id="siteList"></div>
+  </section>
+
+  <section>
+    <button class="primary" id="save">儲存設定</button>
+    <div class="msg" id="msg"></div>
+    <div class="row" style="margin-top:8px">
+      <button id="diag" class="grow">檢查這一頁</button>
+      <button id="clearSeen">清除去重紀錄</button>
+    </div>
+  </section>
+
+  <section>
+    <label class="small">最近的寫入</label>
+    <div class="log" id="log"></div>
+  </section>
+
+  <script src="src/defaults.js"></script>
+  <script src="src/popup.js"></script>
+</body>
+</html>

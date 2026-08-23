@@ -1,0 +1,79 @@
+{
+  "manifest_version": 3,
+  "name": "Adapter Sync — 文獻收藏器",
+  "version": "0.1.0",
+  "description": "看到一篇該留下來的論文，按一下就存進你自己的 Google Drive，並可同步進 Focus4ai 知識庫。支援 PubMed / PMC / arXiv / bioRxiv / medRxiv 與各大出版社。",
+  "permissions": [
+    "storage",
+    "identity",
+    "contextMenus",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://pubmed.ncbi.nlm.nih.gov/*",
+    "https://pmc.ncbi.nlm.nih.gov/*",
+    "https://www.ncbi.nlm.nih.gov/*",
+    "https://arxiv.org/*",
+    "https://www.biorxiv.org/*",
+    "https://www.medrxiv.org/*",
+    "https://www.googleapis.com/*",
+    "https://docs.googleapis.com/*",
+    "https://drive.google.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*"
+  ],
+  "oauth2": {
+    "client_id": "REPLACE_ME.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pubmed.ncbi.nlm.nih.gov/*",
+        "https://pmc.ncbi.nlm.nih.gov/*",
+        "https://www.ncbi.nlm.nih.gov/pmc/*",
+        "https://arxiv.org/abs/*",
+        "https://arxiv.org/pdf/*",
+        "https://www.biorxiv.org/content/*",
+        "https://www.medrxiv.org/content/*"
+      ],
+      "js": [
+        "src/ids.js",
+        "src/citation.js",
+        "src/adapters.js",
+        "src/extract.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/toast.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "capture-paper": {
+      "description": "收錄目前這一篇（預設沒有綁鍵，可在 chrome://extensions/shortcuts 自己設）"
+    }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv47eHJAoc1OMRgZ4JnJCXUKfKCgeVP/g4QueXsB9dwcBIgHCDxDglGDN8pCdvxyRMJ8FOKHaeZAA+kWPEGgqpjBQgG/YphaQsozwRbHNRtgnJxTJdTYHv9fNL6LplXoxhi8gcLV2gmr4/WGppaH3wG8xNvgcbdiW46WRKaNWdAeOLhwbWaJrp6GFa8w2GhKcaYtxxyKFPTDQ7sAvwtLiUpaY6ERaSntRxU0OvaioUw7vgSBr/oGwteAo1YKJlVS/JkwMHTtZnyaeXEQD35TakzrRsu2PoVSr0bJ+vXjqcpDh/Bz2IEL/vbbhFT+nMSDGYjZojzZ6yL/f8UasGRttHwIDAQAB"
+}

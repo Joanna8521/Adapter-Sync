@@ -1,0 +1,11 @@
+# 打包 .crx 用的私鑰。外流等於別人可以發布「同一個擴充 ID」的假版本。
+key.pem
+.ext_key.txt
+
+# 本機的 Claude Code 設定，不是專案的一部分
+.claude/
+
+.DS_Store
+*.zip
+本機備忘.md
+tests/_bundle.js

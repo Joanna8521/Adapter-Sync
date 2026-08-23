@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Adapter Sync — 開始使用</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    color: #1f2937; line-height: 1.75; background: #f9fafb;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 24px; margin-bottom: 6px; }
+  .sub { color: #6b7280; margin-bottom: 28px; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 22px; margin-bottom: 16px; }
+  .card h2 { font-size: 15px; margin-bottom: 8px; }
+  .card p { font-size: 13.5px; color: #4b5563; }
+  .card p + p { margin-top: 8px; }
+  code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  button {
+    background: #059669; border: 0; color: #fff; border-radius: 8px;
+    padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px;
+  }
+  button:hover { filter: brightness(0.95); }
+  .msg { font-size: 13px; margin-top: 10px; min-height: 18px; }
+  .msg.ok { color: #10704a; }
+  .msg.err { color: #dc2626; }
+  ul { margin: 8px 0 0 20px; font-size: 13.5px; color: #4b5563; }
+  li { margin-bottom: 4px; }
+  .warn { border-left: 3px solid #f59e0b; padding-left: 14px; background: #fffbeb; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📄 Adapter Sync</h1>
+  <p class="sub">看到該留下來的論文，按一下就存進你自己的 Drive 與知識庫。</p>
+
+  <div class="card">
+    <h2>1. 內建支援的站台</h2>
+    <p>這幾個裝好就能用，不用設定：</p>
+    <ul>
+      <li>PubMed</li>
+      <li>PubMed Central（PMC）</li>
+      <li>arXiv</li>
+      <li>bioRxiv / medRxiv</li>
+    </ul>
+    <p>打開任何一篇文章頁，右下角會浮出「📄 收這篇文獻」。</p>
+  </div>
+
+  <div class="card">
+    <h2>2. 其他出版社要自己啟用一次</h2>
+    <p>
+      Nature、NEJM、Lancet、JAMA、Elsevier、Springer、Wiley、Frontiers、MDPI……
+      文獻站台列不完，所以本擴充<b>沒有</b>預先要「讀取所有網頁」的權限。
+    </p>
+    <p>
+      在那個出版社的文章頁上點擴充圖示 →「啟用」，Chrome 會問你要不要給那一個網域的權限。
+      給了之後<b>重新整理該分頁</b>，按鈕就會出現。
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>3. 連接 Google（可略過）</h2>
+    <p>
+      連了之後每收一篇會在你自己的 Drive 建一份 Doc，開頭是可以直接貼走的引用格式。
+      權限只有一條：「查看及管理<b>這個應用程式建立的</b>雲端硬碟檔案」——它看不到你 Drive 裡的其他東西。
+    </p>
+    <button id="connect">連接 Google</button>
+    <div class="msg" id="msg"></div>
+    <p style="margin-top:12px">
+      只想寫進 Focus4ai 知識庫、不接 Drive 也完全可以，點擴充圖示設定即可。
+    </p>
+  </div>
+
+  <div class="card warn">
+    <h2>⚠️ 關於撤稿</h2>
+    <p>
+      收錄時會掃描頁面上的撤稿與關切聲明（Expression of Concern），
+      偵測到就會標在檔名、frontmatter 與文件開頭。
+    </p>
+    <p>
+      但<b>沒有標記不等於這篇沒問題</b>。撤稿標記本身就會落後聲明幾天到幾週，
+      而且我們只看得到頁面上寫出來的東西。臨床決策請自己再確認一次。
+    </p>
+  </div>
+</div>
+<script src="src/onboarding.js"></script>
+</body>
+</html>
