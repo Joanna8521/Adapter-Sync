@@ -74,7 +74,15 @@ Cochrane Library、PLOS、Frontiers、MDPI**。
 
 三分鐘，不需要開發環境，也不需要 npm。
 
-**第一步：把檔案拿到手**
+**第一步：把檔案拿到手**（兩種都可以）
+
+- **不會用 git**：按這個 repo 上方綠色的 **`Code` → `Download ZIP`**，
+  解壓縮後你要的是裡面的 **`extension`** 資料夾。
+- **會用 git**：
+
+  ```bash
+  git clone https://github.com/Joanna8521/Adapter-Sync.git
+  ```
 
 放到你放得住的地方（例如「文件」）。
 ⚠️ 安裝後**不能刪除或搬走它**，擴充是直接從這個資料夾執行的。
