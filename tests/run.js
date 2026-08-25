@@ -648,14 +648,18 @@
   it('摘要完整時不能因為頁面上有「Sign in」就亂喊', () => {
     // 「Sign in」幾乎每一家出版社的頁首都有；全文在付費牆後面也是常態。
     // 我們只收摘要，摘要拿到了就不是問題 —— 亂喊會讓警告失去意義。
-    const d = doc(`<head><meta name="citation_title" content="T"></head><body>
+    // fixture 要給 DOI。少了它 verdict 會回「沒有識別碼」的警告，
+    // 而那是另一條規則 —— 混在一起的話，這條測試就分不出
+    // 「訂閱牆誤報」和「缺識別碼」，等於沒測到要測的東西。
+    const d = doc(`<head><meta name="citation_title" content="T">
+      <meta name="citation_doi" content="10.1056/NEJMoa2401234"></head><body>
       <header><a>Sign in to continue</a></header>
       <section class="abstract"><p>${LONG_ABS_BG}</p><p>${LONG_ABS_ME}</p></section>
       <div class="paywall">Purchase access to read the full text.</div>
       </body>`);
     const r = EX.extract(adapterById('generic'), d, loc('https://www.example.org/a'));
     no(r.access.restricted, '摘要完整就不該警告');
-    no(EX.verdict(r).warn, '也不該有警告文字');
+    no(EX.verdict(r).warn, `不該有任何警告，實際「${EX.verdict(r).warn}」`);
   });
 
   it('沒有摘要也沒有訂閱牆（社論、Letter）不能被誤標成受限', () => {
